@@ -1,5 +1,6 @@
 import 'package:dark_chat/constants.dart';
 import 'package:dark_chat/screens/chat_screen.dart';
+import 'package:dark_chat/screens/chtRoomScreen.dart';
 import 'package:dark_chat/services/authentication.dart';
 import 'package:dark_chat/services/fireBackend.dart';
 import 'package:dark_chat/widgets/curvedButton.dart';
@@ -26,7 +27,8 @@ class _LoginScreenState extends State<LoginScreen> {
     if(formkey.currentState.validate()){
       showProgressIndicator = true;
       await authService.signInWithEmailAndPassword(emailController.text, passwordController.text).then((value) => print(value));
-      Navigator.pushReplacementNamed(context, NewChat.id);
+      await authService.updateUserNameSharedPrefrences();
+      Navigator.pushReplacementNamed(context, ChatRoom.id);
       showProgressIndicator = false;
     }
   }
@@ -87,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 height: 24.0,
               ),
-              CurvedButton(fuc: signIn, txt: "Login")
+              CurvedButton(fuc: signIn, txt: "Login"),
             ],
           ),
         ),

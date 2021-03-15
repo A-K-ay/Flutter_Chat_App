@@ -36,5 +36,6 @@ const kInputDecoration = InputDecoration(
   ),
 );
 class Constants{
+
   static String myName = "yashraj";
 }

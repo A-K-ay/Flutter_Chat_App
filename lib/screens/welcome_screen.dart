@@ -1,9 +1,12 @@
 import 'package:dark_chat/screens/login_screen.dart';
 import 'package:dark_chat/screens/registration_screen.dart';
+import 'package:dark_chat/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import '../widgets/curvedButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'newChat.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static String id = "welcome_screen";
@@ -15,6 +18,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation animation;
+  googleSignIn()async{
+    await AuthService().signInWithGoogle(context);
+    await AuthService().updateUsername();
+    Navigator.pushReplacementNamed(context, NewChat.id);
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -97,6 +105,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             ),
             CurvedButton(fuc: (){Navigator.pushNamed(context, LoginScreen.id);},txt: 'Login',),
             CurvedButton(fuc: (){Navigator.pushNamed(context, RegistrationScreen.id);},txt: 'Register',),
+            CurvedButton(fuc:(){
+             googleSignIn();
+              },txt:"Sign In With Google"),
           ],
         ),
       ),

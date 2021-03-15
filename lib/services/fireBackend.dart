@@ -8,13 +8,12 @@ class FireBackendServices {
         .where("username", isEqualTo: username)
         .get();
   }
-  IsUserSignedIn(){
 
+  getUserNameByEmail(String email)async{
+    QuerySnapshot sp = await firebaseFirestore.collection("users").where("email",isEqualTo: email).get();
+    // print(sp.docs[0].data());
+    return sp.docs[0]['userName'];
   }
-  getUserNameByEmail(String email){
-    firebaseFirestore.collection("users").where("email",isEqualTo: email).get();
-  }
-
   uploadUserInfo(userMap) {
     firebaseFirestore.collection('users').add(userMap).catchError((e) {
       print(e);
@@ -35,6 +34,13 @@ class FireBackendServices {
         .catchError((e) {
       print(e);
     });
+  }
+  getChatRooms(String itIsMyName)  {
+    print('getchatrooms run');
+    return  firebaseFirestore
+        .collection("ChatRooms")
+        .where('users', arrayContains: itIsMyName)
+        .snapshots();
   }
 
   getMessages(String chatRoomId) {

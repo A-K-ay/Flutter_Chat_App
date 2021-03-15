@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dark_chat/constants.dart';
 import 'package:dark_chat/screens/chat_screen.dart';
+import 'package:dark_chat/services/authentication.dart';
 import 'package:dark_chat/services/fireBackend.dart';
 import 'package:flutter/material.dart';
 
@@ -27,6 +28,7 @@ class _NewChatState extends State<NewChat> {
       setState(() {
         isLoading = true;
       });
+
       await fireBackendServices.searchByName(newChatController.text)
           .then((snapshot){
         searchResultSnapshot = snapshot;
@@ -36,6 +38,11 @@ class _NewChatState extends State<NewChat> {
         });
       });
     }
+  }
+  checkIfMessagingThemselves(String txt){
+    if (txt == Constants.myName){
+      return true;
+    }else return false;
   }
 
   Widget userList(){
@@ -165,6 +172,7 @@ class _NewChatState extends State<NewChat> {
                   ),
                   GestureDetector(
                     onTap: (){
+                      checkIfMessagingThemselves(newChatController.text)?print('stop messaging yourself'):
                       initiateSearch();
                     },
                     child: Container(

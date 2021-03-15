@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "498442803884-fvbor18q3bntjsc3u1i6fsfo6o7r9vkg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.akay.dark_chat",
+            "certificate_hash": "6fe632fa59e23071adf2e7728d5bdb3f2c6ad3bc"
+          }
+        },
+        {
           "client_id": "498442803884-p16m443ugbnjmjnve5o95o0bcf270er7.apps.googleusercontent.com",
           "client_type": 3
         }

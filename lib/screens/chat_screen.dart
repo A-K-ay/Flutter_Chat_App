@@ -42,8 +42,7 @@ class _ChatScreenState extends State<ChatScreen> {
         "sendBy": Constants.myName,
         "message": messageEditingController.text,
         'time': DateTime
-            .now()
-            .millisecondsSinceEpoch,
+            .now(),
       };
 
       FireBackendServices().addMessages(widget.chatRoomId, chatMessageMap);

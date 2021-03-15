@@ -1,6 +1,7 @@
 
 
 import 'package:dark_chat/screens/chat_screen.dart';
+import 'package:dark_chat/screens/chtRoomScreen.dart';
 import 'package:dark_chat/services/authentication.dart';
 import 'package:dark_chat/services/fireBackend.dart';
 import 'package:dark_chat/widgets/curvedButton.dart';
@@ -34,7 +35,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         "email": emailController.text
       };
      await fireBackendServices.uploadUserInfo(userMap);
-      Navigator.pushReplacementNamed(context, NewChat.id);
+     await authService.updateUserNameSharedPrefrences();
+      Navigator.pushReplacementNamed(context, ChatRoom.id);
       showProgressIndicator = false;
     }
   }
