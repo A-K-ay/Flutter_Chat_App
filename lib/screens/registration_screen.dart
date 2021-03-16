@@ -82,19 +82,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       setState(() {
         showProgressIndicator = true;
       });
-     await authService.signUpWithEmailAndPassword(emailController.text, passwordController.text).then((value) {if(value == null){
-       print("there was an error");
-       setState(() {
-         showProgressIndicator = false;
-       });
-       _showToast("User Exists already");
-     }});
+      await authService.signUpWithEmailAndPassword(emailController.text, passwordController.text).then((value) {if(value == null){
+        print("there was an error");
+        setState(() {
+          showProgressIndicator = false;
+        });
+        _showToast("User Exists already");
+      }});
       Map<String,String> userMap = {
         "userName": usernameController.text,
         "email": emailController.text
       };
-     await fireBackendServices.uploadUserInfo(userMap);
-     await authService.updateUserNameSharedPrefrences();
+      await fireBackendServices.uploadUserInfo(userMap);
+      await authService.updateUserNameSharedPrefrences();
       Navigator.pushReplacementNamed(context, ChatRoom.id);
       setState(() {
         showProgressIndicator = false;
