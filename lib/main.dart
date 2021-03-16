@@ -1,4 +1,5 @@
 import 'package:dark_chat/constants.dart';
+import 'package:dark_chat/screens/newsignupui.dart';
 import 'package:dark_chat/screens/chtRoomScreen.dart';
 import 'package:dark_chat/screens/newChat.dart';
 import 'package:dark_chat/services/authentication.dart';
@@ -12,10 +13,10 @@ import 'package:dark_chat/screens/chat_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(FlashChat());
+  runApp(DarkChat());
 }
 
-class FlashChat extends StatelessWidget {
+class DarkChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,7 +28,7 @@ class FlashChat extends StatelessWidget {
           if(snapshot.hasData){
             return ChatRoom();
           }else{
-            return WelcomeScreen();
+            return LoginScreen();
           }
 
         },
@@ -43,3 +44,13 @@ class FlashChat extends StatelessWidget {
     );
   }
 }
+// class TestUi extends StatelessWidget{
+//   @override
+//   Widget build(BuildContext context){
+//     return MaterialApp(
+//       home: SignUpScreen(),
+//       debugShowCheckedModeBanner: false,
+//     );
+//
+//   }
+// }

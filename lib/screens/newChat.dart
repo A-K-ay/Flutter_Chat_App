@@ -4,6 +4,7 @@ import 'package:dark_chat/screens/chat_screen.dart';
 import 'package:dark_chat/services/authentication.dart';
 import 'package:dark_chat/services/fireBackend.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class NewChat extends StatefulWidget {
   static String id = "NewChat";
@@ -14,23 +15,24 @@ class NewChat extends StatefulWidget {
 class _NewChatState extends State<NewChat> {
   bool isLoading = false;
 
+  FToast fToast;
   TextEditingController newChatController = TextEditingController();
 
   FireBackendServices fireBackendServices = FireBackendServices();
 
   QuerySnapshot searchResultSnapshot;
 
-
   bool haveUserSearched = false;
 
   initiateSearch() async {
-    if(newChatController.text.isNotEmpty){
+    if (newChatController.text.isNotEmpty) {
       setState(() {
         isLoading = true;
       });
 
-      await fireBackendServices.searchByName(newChatController.text)
-          .then((snapshot){
+      await fireBackendServices
+          .searchByName(newChatController.text)
+          .then((snapshot) {
         searchResultSnapshot = snapshot;
         setState(() {
           isLoading = false;
@@ -39,48 +41,51 @@ class _NewChatState extends State<NewChat> {
       });
     }
   }
-  checkIfMessagingThemselves(String txt){
-    if (txt == Constants.myName){
+
+  checkIfMessagingThemselves(String txt) {
+    if (txt == Constants.myName) {
       return true;
-    }else return false;
+    } else
+      return false;
   }
 
-  Widget userList(){
-    return haveUserSearched ? ListView.builder(
-        shrinkWrap: true,
-        itemCount: searchResultSnapshot.size,
-        itemBuilder: (context, index){
-          print(searchResultSnapshot.docs[index]["userName"]);
-          print( searchResultSnapshot.docs[index]["email"]);
-          return userTile(
-            searchResultSnapshot.docs[index]["userName"],
-
-            searchResultSnapshot.docs[index]["email"],
-          );
-        }) : Container();
+  Widget userList() {
+    return haveUserSearched
+        ? ListView.builder(
+            shrinkWrap: true,
+            itemCount: searchResultSnapshot.size,
+            itemBuilder: (context, index) {
+              print(searchResultSnapshot.docs[index]["userName"]);
+              print(searchResultSnapshot.docs[index]["email"]);
+              return userTile(
+                searchResultSnapshot.docs[index]["userName"],
+                searchResultSnapshot.docs[index]["email"],
+              );
+            })
+        : Container();
   }
 
-  sendMessage(String userName){
-    List<String> users = [Constants.myName,userName];
+  sendMessage(String userName) {
+    List<String> users = [Constants.myName, userName];
 
-    String chatRoomId = getChatRoomId(Constants.myName,userName);
+    String chatRoomId = getChatRoomId(Constants.myName, userName);
 
     Map<String, dynamic> chatRoom = {
       "users": users,
-      "chatRoomId" : chatRoomId,
+      "chatRoomId": chatRoomId,
     };
 
     fireBackendServices.createChatRoom(chatRoom, chatRoomId);
 
-    Navigator.push(context, MaterialPageRoute(
-        builder: (context) => ChatScreen(
-          chatRoomId: chatRoomId,
-        )
-    ));
-
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ChatScreen(
+                  chatRoomId: chatRoomId,
+                )));
   }
 
-  Widget userTile(String userName,String userEmail){
+  Widget userTile(String userName, String userEmail) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: Row(
@@ -90,36 +95,27 @@ class _NewChatState extends State<NewChat> {
             children: [
               Text(
                 userName,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16
-                ),
+                style: TextStyle(color: Constants.kPrimaryColorMoreLight, fontSize: 16),
               ),
               Text(
                 userEmail,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16
-                ),
+                style: TextStyle(color:Constants.kPrimaryColorMoreLight, fontSize: 16),
               )
             ],
           ),
           Spacer(),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               sendMessage(userName);
             },
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 12,vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(24)
+                  color: Colors.blue, borderRadius: BorderRadius.circular(24)),
+              child: Text(
+                "Message",
+                style: TextStyle(color: Colors.white, fontSize: 16),
               ),
-              child: Text("Message",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16
-                ),),
             ),
           )
         ],
@@ -134,73 +130,103 @@ class _NewChatState extends State<NewChat> {
       return "$a\_$b";
     }
   }
+  _showToast(String txt) {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Constants.kPrimaryColorSkin,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.error_outlined,color: Colors.redAccent,),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text(txt),
+        ],
+      ),
+    );
+
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
+
+
+  }
 
   @override
   void initState() {
     super.initState();
-
+    fToast = FToast();
+    fToast.init(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: isLoading ? Container(
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ) :  Container(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              color: Color(0x54FFFFFF),
-              child: Row(
+      appBar: AppBar(backgroundColor: Constants.kPrimaryColorLight.withOpacity(1),),
+      backgroundColor: Constants.kPrimaryColorDark,
+      body: isLoading
+          ? Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : Container(
+              child: Column(
                 children: [
-                  Expanded(
-                    child: TextField(
-                      controller: newChatController,
-                      decoration: InputDecoration(
-                          hintText: "search username ...",
-                          hintStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 12,horizontal: 12),
+                    decoration: BoxDecoration(
+                  color: Colors.white54,
+
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+
+                    child: Row(
+                      children: [
+                        SizedBox(width: 16,),
+                        Expanded(
+                          child: TextField(
+                            controller: newChatController,
+                            onSubmitted: (val){
+                              checkIfMessagingThemselves(newChatController.text)
+                                  ? print('stop messaging yourself')
+                                  : initiateSearch();
+                            },
+                            decoration: InputDecoration(
+                                hintText: "Search Username ...",
+                                hintStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                                border: InputBorder.none),
                           ),
-                          border: InputBorder.none
-                      ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            checkIfMessagingThemselves(newChatController.text)
+                                ? _showToast("You Can't Message yourself!")
+                                : initiateSearch();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(child: Icon(Icons.search)),
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                  GestureDetector(
-                    onTap: (){
-                      checkIfMessagingThemselves(newChatController.text)?print('stop messaging yourself'):
-                      initiateSearch();
-                    },
-                    child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                colors: [
-                                  const Color(0x36FFFFFF),
-                                  const Color(0x0FFFFFFF)
-                                ],
-                                begin: FractionalOffset.topLeft,
-                                end: FractionalOffset.bottomRight
-                            ),
-                            borderRadius: BorderRadius.circular(40)
-                        ),
-                        padding: EdgeInsets.all(12),
-                        child: Icon(Icons.search),
-                         ),
-                  )
+                  userList()
                 ],
               ),
             ),
-            userList()
-          ],
-        ),
-      ),
     );
   }
 }
-

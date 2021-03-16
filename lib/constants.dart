@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+const kPrimaryColor = Colors.indigo;
+Color kPrimaryLightColor = Colors.blue[100];
+
 const kSendButtonTextStyle = TextStyle(
   color: Colors.lightBlueAccent,
   fontWeight: FontWeight.bold,
@@ -38,4 +41,10 @@ const kInputDecoration = InputDecoration(
 class Constants{
 
   static String myName = "yashraj";
+  static const kPrimaryColorDark = Color(0xff143959);
+  static const kPrimaryColorLight = Color(0xff1f7396);
+  static const kPrimaryColorGreen = Color(0xff27D3A8);
+  static const kPrimaryColorMoreLight = Color(0xffc7e6ff);
+  static const kPrimaryColorSkin = Color(0xffF8E7AE);
+  static const kPrimaryColorWhite = Color(0xffffffff);
 }

@@ -25,6 +25,7 @@ class _ChatScreenState extends State<ChatScreen> {
       builder: (context, snapshot){
 
         return snapshot.hasData ?  ListView.builder(
+          reverse: true,
             itemCount: snapshot.data.size,
             itemBuilder: (context, index){
               return MessageTile(
@@ -66,29 +67,43 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black38,
-      appBar: AppBar(),
+      backgroundColor: Constants.kPrimaryColorDark,
+      appBar: AppBar(backgroundColor: Constants.kPrimaryColorLight.withOpacity(1),),
       body: Container(
         child: Stack(
           children: [
-            chatMessages(),
-            Container(alignment: Alignment.bottomCenter,
+            Container(margin:EdgeInsets.only(bottom: 64,),child: chatMessages()),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 6,horizontal: 6),
+              alignment: Alignment.bottomCenter,
               width: MediaQuery
                   .of(context)
                   .size
                   .width,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-                color: Color(0x54FFFFFF),
+                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: [
+                          Constants.kPrimaryColorLight,
+                          Constants.kPrimaryColorLight.withOpacity(.5),
+                        ],
+                        begin: FractionalOffset.topLeft,
+                        end: FractionalOffset.bottomRight
+                    ),
+                    borderRadius: BorderRadius.circular(40)
+                ),
                 child: Row(
                   children: [
+                    SizedBox(width: 16,),
                     Expanded(
+
                         child: TextField(
                           controller: messageEditingController,
                           decoration: InputDecoration(
                               hintText: "Message ...",
                               hintStyle: TextStyle(
-                                color: Colors.white,
+                                color: Constants.kPrimaryColorMoreLight,
                                 fontSize: 16,
                               ),
                               border: InputBorder.none
@@ -100,6 +115,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         addMessage();
                       },
                       child: Container(
+                        margin: EdgeInsets.all(4),
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(
@@ -114,7 +130,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               borderRadius: BorderRadius.circular(40)
                           ),
                           padding: EdgeInsets.all(12),
-                          child: Icon(Icons.search)),
+                          child: Center(child: Icon(Icons.send_rounded,color: Constants.kPrimaryColorMoreLight,),)),
                     ),
                   ],
                 ),

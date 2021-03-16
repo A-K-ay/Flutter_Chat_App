@@ -47,7 +47,7 @@ class FireBackendServices {
    return firebaseFirestore
         .collection("ChatRooms")
         .doc(chatRoomId)
-        .collection("chats").snapshots();
+        .collection("chats").orderBy('time',descending: true).snapshots();
   }
   addMessages(String chatRoomId, messageMap) {
     firebaseFirestore

@@ -75,8 +75,9 @@ class AuthService {
       };
       await FireBackendServices().uploadUserInfo(userMap);
       await updateUserNameSharedPrefrences();
+      return true;
 
-    }
+    }else return false;
 
   }
 

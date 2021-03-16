@@ -22,6 +22,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="dark_chat">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <meta name="google-signin-client_id" content="498442803884-s9l753gqldqjst53797bn55nd7k5ctt4.apps.googleusercontent" />
 
   <title>dark_chat</title>
   <link rel="manifest" href="manifest.json">
@@ -30,6 +31,29 @@
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-messaging.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-firestore.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+       https://firebase.google.com/docs/web/setup#available-libraries -->
+
+  <script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCA_TDhzOE_ttWaMSDEWtcv8xemcqYU94Y",
+    authDomain: "chat-app-fb620.firebaseapp.com",
+    projectId: "chat-app-fb620",
+    storageBucket: "chat-app-fb620.appspot.com",
+    messagingSenderId: "498442803884",
+    appId: "1:498442803884:web:ca076d2abb53753c84dd09"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+
   <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;

@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dark_chat/screens/login_screen.dart';
 import 'package:dark_chat/screens/welcome_screen.dart';
 import '../constants.dart';
 import '../services/authentication.dart';
@@ -34,7 +35,7 @@ class _ChatRoomState extends State<ChatRoom> {
                 chatRoomId: snapshot.data.docs[index]["chatRoomId"],
               );
             })
-            : Container(color: Colors.blue,width: 200,height: 300,child: Text('No Data Untill now',),);
+            : Container();
       },
     );
   }
@@ -59,21 +60,21 @@ class _ChatRoomState extends State<ChatRoom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black38,
+      backgroundColor: Constants.kPrimaryColorDark,
       appBar: AppBar(
-        title: Icon(Icons.ac_unit),
         elevation: 0.0,
         centerTitle: false,
+        backgroundColor: Constants.kPrimaryColorLight.withOpacity(1),
         actions: [
           GestureDetector(
             onTap: () {
               AuthService().signOut();
               Navigator.pushReplacementNamed(context,
-                  WelcomeScreen.id);
+                  LoginScreen.id);
             },
             child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Icon(Icons.exit_to_app)),
+                child: Icon(Icons.exit_to_app,color: Constants.kPrimaryColorSkin,)),
           )
         ],
       ),
@@ -81,7 +82,8 @@ class _ChatRoomState extends State<ChatRoom> {
         child: chatRoomsList(),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.search),
+        backgroundColor: Constants.kPrimaryColorGreen,
+        child: Icon(Icons.message_outlined),
         onPressed: () {
           Navigator.pushNamed(
               context, NewChat.id);
@@ -107,38 +109,41 @@ class ChatRoomsTile extends StatelessWidget {
             )
         ));
       },
-      child: Container(
-        color: Colors.black26,
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        child: Row(
-          children: [
-            Container(
-              height: 30,
-              width: 30,
-              decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(30)),
-              child: Center(
-                child: Text(userName.substring(0, 1).toUpperCase(),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: 'OverpassRegular',
-                        fontWeight: FontWeight.w300)),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 1.0),
+        child: Container(
+          color: Colors.black26,
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          child: Row(
+            children: [
+              Container(
+                height: 30,
+                width: 30,
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(30)),
+                child: Center(
+                  child: Text(userName.substring(0, 1).toUpperCase(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontFamily: 'OverpassRegular',
+                          fontWeight: FontWeight.w300)),
+                ),
               ),
-            ),
-            SizedBox(
-              width: 12,
-            ),
-            Text(userName,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'OverpassRegular',
-                    fontWeight: FontWeight.w300))
-          ],
+              SizedBox(
+                width: 12,
+              ),
+              Text(userName,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                      color: Constants.kPrimaryColorMoreLight,
+                      fontSize: 16,
+                      fontFamily: 'OverpassRegular',
+                      fontWeight: FontWeight.w300))
+            ],
+          ),
         ),
       ),
     );
