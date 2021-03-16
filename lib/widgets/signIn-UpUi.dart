@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import '/constants.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import '../constants.dart';
@@ -32,10 +31,10 @@ class SocalIcon extends StatelessWidget {
           ),
           shape: BoxShape.circle,
         ),
-        child: SvgPicture.asset(
+        child: Image.asset(
           iconSrc,
-          height: 20,
-          width: 20,
+          height: 30,
+          width: 30,
         ),
       ),
     );

@@ -17,7 +17,6 @@ import '/components/rounded_input_field.dart';
 import '/components/rounded_password_field.dart';
 import 'package:flutter/widgets.dart';
 
-import 'newChat.dart';
 class LoginScreen extends StatefulWidget {
   static String id = "login_screen";
 
@@ -93,7 +92,9 @@ class _LoginScreenState extends State<LoginScreen> {
       await authService.signInWithEmailAndPassword(emailController.text, passwordController.text).then((value) {if(value == null){
         print("Error in the login sytem either no account like that of no ");
         setState(() {
-
+          setState(() {
+            showProgressIndicator = false;
+          });
         });
         _showToast("No Such User Exists");
       }});
@@ -107,78 +108,85 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: ModalProgressHUD(
-        inAsyncCall: showProgressIndicator,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: Responsive.isDesktop(context)? EdgeInsets.all(0): EdgeInsets.symmetric(horizontal: Responsive.sWidth(context)*.3),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Image.asset('images/img2.png',height: 270,width: 270,),
-                Text(
-                  "Sign In",
-                  style: GoogleFonts.pacifico(fontStyle: FontStyle.normal,fontSize: 30),
-                ),
-                SizedBox(height: Responsive.sHeight(context) * 0.01),
-                Form(
-                  key: formkey,
-                  child: Column(
-                    children: [
-                      RoundedInputField(
-                        hintText: "Your Email",
-                        onSubmitted: signIn,
-                        onChanged: (value) {},
-                        controller: emailController,
-                        fuc: (val){
-                          return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ?
-                          null : "Enter a correct email";
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Constants.kBGColorDark,
+        body: ModalProgressHUD(
+          inAsyncCall: showProgressIndicator,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: Responsive.isDesktop(context)? EdgeInsets.all(0): EdgeInsets.symmetric(horizontal: Responsive.sWidth(context)*.3),
+              child: Stack(
+                children: [
+                  Image.asset('images/moonlightFullBlack.png',width: 400,),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(height: 110,),
+                      Text(
+                        "Sign In",
+                        style: GoogleFonts.pacifico(fontStyle: FontStyle.normal,fontSize: 30),
+                      ),
+                      SizedBox(height: Responsive.sHeight(context) * 0.01),
+                      Form(
+                        key: formkey,
+                        child: Column(
+                          children: [
+                            RoundedInputField(
+                              hintText: "Your Email",
+                              onSubmitted: signIn,
+                              onChanged: (value) {},
+                              controller: emailController,
+                              fuc: (val){
+                                return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ?
+                                null : "Enter a correct email";
+                              },
+                            ),
+                            RoundedPasswordField(
+                              onChanged: (value) {},
+                              onSubmitted: signIn,
+                              controller: passwordController,
+                              fuc: (val){
+                                return val.length < 6 ? "Password must be more than 6 characters" : null;
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      RoundedButton(
+                        text: "SIGIN",
+                        press: signIn,
+                      ),
+                      SizedBox(height: Responsive.sHeight(context) * 0.01),
+                      AlreadyHaveAnAccountCheck(
+                        press: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+
+                                return RegistrationScreen();
+                              },
+                            ),
+                          );
                         },
                       ),
-                      RoundedPasswordField(
-                        onChanged: (value) {},
-                        onSubmitted: signIn,
-                        controller: passwordController,
-                        fuc: (val){
-                          return val.length < 6 ? "Password must be more than 6 characters" : null;
-                        },
-                      ),
+                      OrDivider(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+
+                          SocalIcon(
+                            iconSrc: "images/google_logo.png",
+                            press: googleSignIn,
+                          ),
+                        ],
+                      )
                     ],
                   ),
-                ),
-
-                RoundedButton(
-                  text: "SIGIN",
-                  press: signIn,
-                ),
-                SizedBox(height: Responsive.sHeight(context) * 0.01),
-                AlreadyHaveAnAccountCheck(
-                  press: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-
-                          return RegistrationScreen();
-                        },
-                      ),
-                    );
-                  },
-                ),
-                OrDivider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-
-                    SocalIcon(
-                      iconSrc: "images/google-plus.svg",
-                      press: googleSignIn,
-                    ),
-                  ],
-                )
-              ],
+                ],
+              ),
             ),
           ),
         ),

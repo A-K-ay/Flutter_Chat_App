@@ -1,7 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dark_chat/screens/login_screen.dart';
-import 'package:dark_chat/screens/welcome_screen.dart';
 import '../constants.dart';
 import '../services/authentication.dart';
 import '../services/fireBackend.dart';
@@ -26,7 +25,7 @@ class _ChatRoomState extends State<ChatRoom> {
             itemCount: snapshot.data.size,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              print('yooooooooooooo'+snapshot.data.docs[index]['chatRoomId']);
+              print('...'+snapshot.data.docs[index]['chatRoomId']);
               return ChatRoomsTile(
                 userName: snapshot.data.docs[index]['chatRoomId']
                     .toString()
@@ -101,18 +100,20 @@ class ChatRoomsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return userName.isEmpty||chatRoomId.isEmpty?Container(color:Colors.amber,height: 200,width: 400,child: Text('please restart teh app'),):GestureDetector(
+    return userName.isEmpty||chatRoomId.isEmpty?Container():GestureDetector(
       onTap: (){
         Navigator.push(context, MaterialPageRoute(
             builder: (context) => ChatScreen(
-              chatRoomId: chatRoomId,
+              chatRoomId: chatRoomId,chatUserName: userName,
             )
         ));
       },
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 1.0),
+        padding: const EdgeInsets.symmetric(vertical: 6.0,horizontal: 16.0),
         child: Container(
-          color: Colors.black26,
+          decoration: BoxDecoration(
+              color:  Colors.black26,
+              borderRadius: BorderRadius.circular(10)),
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
           child: Row(
             children: [

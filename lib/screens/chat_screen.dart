@@ -1,4 +1,4 @@
-import 'dart:io';
+
 import '../constants.dart';
 import '../services/fireBackend.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 class ChatScreen extends StatefulWidget {
   static String id = "Chat_Screen";
   final String chatRoomId;
+  final String chatUserName;
 
-  ChatScreen({this.chatRoomId});
+  ChatScreen({this.chatRoomId,this.chatUserName});
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -58,6 +59,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     try{chats = FireBackendServices().getMessages(widget.chatRoomId);
     chats.isEmpty != null ? print("stream is empty"):print("this stream works") ;
+
     }
     catch(e){print('$e');}
 
@@ -68,7 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constants.kPrimaryColorDark,
-      appBar: AppBar(backgroundColor: Constants.kPrimaryColorLight.withOpacity(1),),
+      appBar: AppBar(backgroundColor: Constants.kPrimaryColorLight.withOpacity(1),title:Text( widget.chatUserName),),
       body: Container(
         child: Stack(
           children: [
@@ -129,8 +131,8 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                               borderRadius: BorderRadius.circular(40)
                           ),
-                          padding: EdgeInsets.all(12),
-                          child: Center(child: Icon(Icons.send_rounded,color: Constants.kPrimaryColorMoreLight,),)),
+                          padding: EdgeInsets.all(8),
+                          child: Center(child: Image.asset('images/sendgold.png'))),
                     ),
                   ],
                 ),

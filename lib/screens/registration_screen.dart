@@ -42,6 +42,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     await AuthService().updateUsername();
     Navigator.pushReplacementNamed(context, NewChat.id);
   }
+  @override
+  void initState() {
+    super.initState();
+    fToast = FToast();
+    fToast.init(context);
+  }
   _showToast(String txt) {
     Widget toast = Container(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
@@ -98,88 +104,95 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: ModalProgressHUD(
-        inAsyncCall: showProgressIndicator,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding:Responsive.isDesktop(context)? EdgeInsets.all(0): EdgeInsets.symmetric(horizontal: Responsive.sWidth(context)*.3),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Image.asset('images/img2.png',height: 270,width: 270,),
-                Text(
-                  "Sign Up",
-                  style: GoogleFonts.pacifico(fontStyle: FontStyle.normal,fontSize: 30),
-                ),
-                SizedBox(height: Responsive.sHeight(context) * 0.01),
-                Form(
-                  key: formkey,
-                  child: Column(
-                    children: [
-                      RoundedInputField(
-                        hintText: "Enter a Username",
-                        onChanged: (value) {},
-                        onSubmitted: signUp,
-                        controller:usernameController,
-                        fuc: (val){
-                          return val.isEmpty || val.length < 3 ? "Enter Username 3+ characters" : null;
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Constants.kBGColorDark,
+        body: ModalProgressHUD(
+          inAsyncCall: showProgressIndicator,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding:Responsive.isDesktop(context)? EdgeInsets.all(0): EdgeInsets.symmetric(horizontal: Responsive.sWidth(context)*.3),
+              child: Stack(
+                children: [
+                  Image.asset('images/moonlightFullBlack.png',width: 400,),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(height: 110,),
+                      Text(
+                        "Sign Up",
+                        style: GoogleFonts.pacifico(fontStyle: FontStyle.normal,fontSize: 30),
+                      ),
+                      SizedBox(height: Responsive.sHeight(context) * 0.01),
+                      Form(
+                        key: formkey,
+                        child: Column(
+                          children: [
+                            RoundedInputField(
+                              hintText: "Enter a Username",
+                              onChanged: (value) {},
+                              onSubmitted: signUp,
+                              controller:usernameController,
+                              fuc: (val){
+                                return val.isEmpty || val.length < 3 ? "Enter Username 3+ characters" : null;
+                              },
+                            ),
+                            RoundedInputField(
+                              hintText: "Your Email",
+                              onChanged: (value) {},
+                              onSubmitted: signUp,
+                              controller: emailController,
+                              fuc: (val){
+                                return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ?
+                                null : "Enter a correct email";
+                              },
+                            ),
+                            RoundedPasswordField(
+                              onChanged: (value) {},
+                              onSubmitted: signUp,
+                              controller: passwordController,
+                              fuc: (val){
+                                return val.length < 6 ? "Password must be more than 6 characters" : null;
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      RoundedButton(
+                        text: "SIGNUP",
+                        press: signUp,
+                      ),
+                      SizedBox(height: Responsive.sHeight(context) * 0.01),
+                      AlreadyHaveAnAccountCheck(
+                        login: false,
+                        press: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+
+                                return LoginScreen();
+                              },
+                            ),
+                          );
                         },
                       ),
-                      RoundedInputField(
-                        hintText: "Your Email",
-                        onChanged: (value) {},
-                        onSubmitted: signUp,
-                        controller: emailController,
-                        fuc: (val){
-                          return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ?
-                          null : "Enter a correct email";
-                        },
-                      ),
-                      RoundedPasswordField(
-                        onChanged: (value) {},
-                        onSubmitted: signUp,
-                        controller: passwordController,
-                        fuc: (val){
-                          return val.length < 6 ? "Password must be more than 6 characters" : null;
-                        },
-                      ),
+                      OrDivider(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+
+                          SocalIcon(
+                            iconSrc: "images/google_logo.png",
+                            press: googleSignIn,
+                          ),
+                        ],
+                      )
                     ],
                   ),
-                ),
-
-                RoundedButton(
-                  text: "SIGNUP",
-                  press: signUp,
-                ),
-                SizedBox(height: Responsive.sHeight(context) * 0.01),
-                AlreadyHaveAnAccountCheck(
-                  login: false,
-                  press: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-
-                          return LoginScreen();
-                        },
-                      ),
-                    );
-                  },
-                ),
-                OrDivider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-
-                    SocalIcon(
-                      iconSrc: "images/google-plus.svg",
-                      press: googleSignIn,
-                    ),
-                  ],
-                )
-              ],
+                ],
+              ),
             ),
           ),
         ),

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dark_chat/constants.dart';
 import 'package:dark_chat/screens/chat_screen.dart';
-import 'package:dark_chat/services/authentication.dart';
 import 'package:dark_chat/services/fireBackend.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -75,13 +74,12 @@ class _NewChatState extends State<NewChat> {
       "chatRoomId": chatRoomId,
     };
 
-    fireBackendServices.createChatRoom(chatRoom, chatRoomId);
-
+    try{fireBackendServices.createChatRoom(chatRoom, chatRoomId);}catch(e){print("send message error : $e");}
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => ChatScreen(
-                  chatRoomId: chatRoomId,
+                  chatRoomId: chatRoomId,chatUserName: userName,
                 )));
   }
 
